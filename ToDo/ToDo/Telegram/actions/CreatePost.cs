@@ -22,8 +22,6 @@ namespace ToDo.Telegram.actions
                    text: "Опишите задачу",
                    replyMarkup: new ForceReplyMarkup { Selective = true }
                    );
-
-
                 return true;
             }
             else

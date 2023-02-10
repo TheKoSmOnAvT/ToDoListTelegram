@@ -6,37 +6,32 @@ using ToDo.Telegram.Utils;
 
 namespace ToDo.Telegram.actions
 {
-    /// <summary>
-    /// Изменение страницы таблицы
-    /// </summary>
-    public class TagsListNextPage : IChain
+    public class TagsHasBeenSelected : IChain
     {
-        private TagService tagService;
-
-
-        public TagsListNextPage(TagService tagService)
+        private PostService postService;
+        public TagsHasBeenSelected(PostService postService)
         {
-            this.tagService = tagService;
+            this.postService = postService;
         }
-
 
         public bool isExecute(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken, CallBackEnum? idCallBack, List<string> callbackItems)
         {
-            if (idCallBack == CallBackEnum.TagsListNextPage)
+            if (idCallBack == CallBackEnum.TagsHasBeenSelected)
             {
-                int page = int.Parse(callbackItems[1]);
+                int tagId = int.Parse(callbackItems[1]);
                 int postId = int.Parse(callbackItems[2]);
-                int countElements = GlobalParams.CountTagsOnPage;
 
-                var tags = tagService.Get(page * countElements, countElements);
+                var ok = postService.SetTag(postId, tagId);
+                if(ok == false)
+                {
+                    throw new Exception("TagsHasBeenSelected set tag ex");
+                }
 
-                var keyboard = TagsTable.CreateButtonsList(tags, page, postId);
 
                 botClient.EditMessageTextAsync(
                     chatId: update.CallbackQuery.Message.Chat.Id,
                     messageId: update.CallbackQuery.Message.MessageId,
-                    text: $"Выберите тематику записи",
-                    replyMarkup: keyboard,
+                    text: $"Задача добавлена",
                     cancellationToken: cancellationToken
                 );
 

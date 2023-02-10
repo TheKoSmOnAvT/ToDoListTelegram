@@ -17,9 +17,11 @@ namespace ToDo.Telegram.actions
     {
         private TagService tagService;
 
-        public GetTitlePost(TagService tagService)
+        private PostService postService;
+        public GetTitlePost(TagService tagService, PostService postService)
         {
             this.tagService = tagService;
+            this.postService = postService;
         }
 
 
@@ -29,15 +31,15 @@ namespace ToDo.Telegram.actions
             {
 
                 int page = 0;
-                int countElements = 6;
+                int countElements = GlobalParams.CountTagsOnPage;
 
                 //берется ответ на сообщение
-                //TODO: save в бд
-                var titlePost = update.Message.Text;
+                var idPost = postService.Add(update.Message.Text, update.Message.Chat.Id);
+
 
                 var tags = tagService.Get(page * countElements, countElements);
 
-                var keyboard = TagsTable.CreateButtonsList(tags, page);
+                var keyboard = TagsTable.CreateButtonsList(tags, page, idPost);
 
 
                 botClient.DeleteMessageAsync(

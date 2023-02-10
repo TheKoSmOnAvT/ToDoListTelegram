@@ -36,12 +36,15 @@ builder.Services.AddAutoMapper(typeof(AppMappingProfile));
 builder.Services.AddTransient<TagRepository>();
 builder.Services.AddTransient<TagService>();
 
+builder.Services.AddTransient<PostRepository>();
+builder.Services.AddTransient<PostService>();
 
 //bot
 builder.Services.AddTransient<IChain, Start>();
 builder.Services.AddTransient<IChain, CreatePost>();
 builder.Services.AddTransient<IChain, GetTitlePost>();
 builder.Services.AddTransient<IChain, TagsListNextPage>();
+builder.Services.AddTransient<IChain, TagsHasBeenSelected>();
 
 
 builder.Services.AddTransient<BotHandler>();

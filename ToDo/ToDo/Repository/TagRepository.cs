@@ -39,6 +39,13 @@ namespace ToDo.Repository
             return context.Tags.ToList();
         }
 
+        public Tag Get(int id)
+        {
+            using var context = ToDoContextFactory.CreateDbContext();
+            return context.Tags.First(x => x.id == id);
+        }
+
+
         public List<Tag> Get(int skip, int limit)
         {
             using var context = ToDoContextFactory.CreateDbContext();

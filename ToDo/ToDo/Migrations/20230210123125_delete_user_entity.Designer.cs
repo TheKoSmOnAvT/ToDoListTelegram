@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ToDo.Entity;
@@ -11,9 +12,11 @@ using ToDo.Entity;
 namespace ToDo.Migrations
 {
     [DbContext(typeof(ToDoContext))]
-    partial class ToDoContextModelSnapshot : ModelSnapshot
+    [Migration("20230210123125_delete_user_entity")]
+    partial class deleteuserentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,7 +57,7 @@ namespace ToDo.Migrations
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("boolean");
 
-                    b.Property<int?>("Tagid")
+                    b.Property<int>("Tagid")
                         .HasColumnType("integer");
 
                     b.Property<long>("TelegramUserId")
@@ -103,7 +106,9 @@ namespace ToDo.Migrations
                 {
                     b.HasOne("ToDo.Entity.Tag", "Tag")
                         .WithMany("Posts")
-                        .HasForeignKey("Tagid");
+                        .HasForeignKey("Tagid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Tag");
                 });

@@ -6,12 +6,12 @@ namespace ToDo.Telegram.Utils
     public class TagsTable
     {
 
-        public static InlineKeyboardMarkup CreateButtonsList(List<TagModel> tags, int page)
+        public static InlineKeyboardMarkup CreateButtonsList(List<TagModel> tags, int page, int postId)
         {
             List<List<InlineKeyboardButton>> controlsRow = new();
             foreach (var tag in tags)
             {
-                controlsRow.Add(new List<InlineKeyboardButton>() { new InlineKeyboardButton(tag.title) { CallbackData = $"{((int)CallBackEnum.TagsHasBeenSelected)}_{tag.id}" } });
+                controlsRow.Add(new List<InlineKeyboardButton>() { new InlineKeyboardButton(tag.title) { CallbackData = $"{((int)CallBackEnum.TagsHasBeenSelected)}_{tag.id}_{postId}" } });
             }
 
 
@@ -20,21 +20,14 @@ namespace ToDo.Telegram.Utils
             var pagePrev = page - 1;
             if (page != 0)
             {
-                control.Add(new InlineKeyboardButton("<-") { CallbackData = $"{((int)CallBackEnum.TagsListNextPage)}_{(pagePrev)}" });
+                control.Add(new InlineKeyboardButton("<-") { CallbackData = $"{((int)CallBackEnum.TagsListNextPage)}_{(pagePrev)}_{postId}" });
             }
-            if (tags.Count >= 6)
+            if (tags.Count >= GlobalParams.CountTagsOnPage)
             {
-                control.Add(new InlineKeyboardButton("->") { CallbackData = $"{((int)CallBackEnum.TagsListNextPage)}_{(page + 1)}" });
+                control.Add(new InlineKeyboardButton("->") { CallbackData = $"{((int)CallBackEnum.TagsListNextPage)}_{(page + 1)}_{postId}" });
             }
-
-            //new List<InlineKeyboardButton>() {
-            //        new InlineKeyboardButton("<-") { CallbackData = $"{((int)CallBackEnum.TagsListNextPage)}_{(page - 1 >=0 ? page - 1 : page) }"},
-            //        new InlineKeyboardButton("->") { CallbackData = $"{((int)CallBackEnum.TagsListNextPage)}_{page + 1}"},
-            //    }
 
             controlsRow.Add(control);
-
-
             return new InlineKeyboardMarkup(controlsRow);
         }
     }

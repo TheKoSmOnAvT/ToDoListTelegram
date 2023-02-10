@@ -10,6 +10,9 @@ namespace ToDo
         public AppMappingProfile()
         {
             CreateMap<Tag, TagModel>().ReverseMap();
+
+
+            CreateMap<Post, PostModel>().ReverseMap();
         }
     }
 }
